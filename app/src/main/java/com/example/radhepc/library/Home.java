@@ -8,15 +8,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class Home extends AppCompatActivity implements View.OnClickListener {
 
+    DbHelper helper;
+    TextView details;
+    User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar tb = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(tb);
+        helper= new DbHelper(this);
+        if(getIntent().getExtras()!=null){
+            String id= getIntent().getExtras().getString("id");
+            User.id=id;
+        }
+
+        user=helper.getUserDetails(User.id);
+        details= (TextView) findViewById(R.id.details);
+        details.setText("Name :"+user.Name+"\nEmail id: "+user.EmailId+"\n");
+
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

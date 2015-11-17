@@ -8,17 +8,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
+    EditText userid,pass;
+    DbHelper helper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Toolbar tb = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(tb);
-
+        userid= (EditText) findViewById(R.id.username);
+        pass= (EditText) findViewById(R.id.password);
+        helper= new DbHelper(this);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -67,7 +73,17 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }
         if (view.getId()==R.id.loginbutton)
         {
-            startActivity(new Intent(Login.this,Home.class));
+          boolean loggedIN= helper.Authenticate(userid.getText().toString(),pass.getText().toString());
+            if(loggedIN)
+            {
+                Bundle bundle= new Bundle();
+                bundle.putString("id", userid.getText().toString());
+                Intent intent= new Intent(this,Home.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
+            }else
+            Toast.makeText(this,"Error !!!!" ,Toast.LENGTH_LONG).show();
         }
     }
 }

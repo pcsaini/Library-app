@@ -8,16 +8,36 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class Create extends AppCompatActivity implements View.OnClickListener {
 
+    EditText name,emailid,dob,mobno,useid,pass;
+    String gender=null;
+    DbHelper helper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
-
+        helper= new DbHelper(this);
         Toolbar tb = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(tb);
+
+        name= (EditText) findViewById(R.id.name);
+        emailid= (EditText) findViewById(R.id.gmail);
+        dob= (EditText) findViewById(R.id.editText);
+        useid= (EditText) findViewById(R.id.username_create);
+        mobno= (EditText) findViewById(R.id.number);
+        pass= (EditText) findViewById(R.id.createpassword);
+        RadioButton btn= (RadioButton) findViewById(R.id.male);
+        RadioButton femaleBtn= (RadioButton) findViewById(R.id.female);
+
+        gender=(btn.isChecked())?"male":"female";
+
+
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -56,10 +76,21 @@ public class Create extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+       boolean isRegistered= helper.Register(new User(useid.getText().toString(),
+                name.getText().toString(),
+                pass.getText().toString(),
+                emailid.getText().toString(),mobno.getText().toString(),
+                gender,dob.getText().toString()));
 
-        if (view.getId()==R.id.createbutton)
-        {
-            startActivity(new Intent(Create.this,Home.class));
-        }
+        if(isRegistered){
+            Bundle bundle= new Bundle();
+            bundle.putString("id", useid.getText().toString());
+            Intent intent= new Intent(this,Home.class);
+            intent.putExtras(bundle);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }else
+        Toast.makeText(this,"Cannot Register !!!!!",Toast.LENGTH_LONG).show();
+
     }
 }

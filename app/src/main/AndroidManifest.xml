@@ -29,10 +29,12 @@
             android:label="@string/title_activity_home" >
         </activity>
         <activity
+            android:parentActivityName=".Home"
             android:name=".Issue"
             android:label="@string/title_activity_issue" >
         </activity>
         <activity
+            android:parentActivityName=".Home"
             android:name=".Sell"
             android:label="@string/title_activity_sell" >
         </activity>
